@@ -1,0 +1,88 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* --- SCROLLBAR USING YOUR BRIGHT PALETTE --- */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #FEEAFA; /* pale-purple */
+}
+::-webkit-scrollbar-thumb {
+  background: #CBC0D3; /* thistle */
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #8E9AAF; /* cool-gray */
+}
+
+/* --- ENHANCED & NEW COMPONENT STYLES --- */
+@layer components {
+  /* A custom focus ring using your brand color */
+  .focus-ring {
+    @apply focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-thistle;
+  }
+
+  /* --- ENHANCED CARD HOVER EFFECT --- */
+  .card-hover {
+    @apply transition-all duration-300 ease-in-out;
+  }
+  .card-hover:hover {
+    /* Lifts up and gets a subtle glow shadow */
+    @apply transform -translate-y-2 shadow-[0_10px_30px_-10px_rgba(203,192,211,0.7)];
+  }
+
+  /* --- ENHANCED BUTTON ANIMATIONS --- */
+  .btn-animate {
+    @apply transition-all duration-200 ease-in-out;
+  }
+  .btn-animate:hover {
+    /* Lifts, scales up, and gets a brighter shadow */
+    @apply transform -translate-y-1 scale-105 shadow-lg;
+  }
+  .btn-animate:active {
+    /* "Pushes down" when clicked */
+    @apply scale-95;
+  }
+
+  /* --- NEW: SHIMMER EFFECT FOR GRADIENT BUTTONS --- */
+  .btn-gradient-shimmer {
+    /* This class should be ADDED to a button that already has a gradient */
+    background-size: 200% auto; /* Essential for the shimmer effect */
+    @apply animate-shimmer;
+  }
+
+  /* --- NEW: FADE-IN ANIMATION CLASS --- */
+  .animate-on-load {
+    /* Add this class to elements you want to animate on page load */
+    @apply animate-fade-in-up opacity-0;
+  }
+
+  /* A custom spinner class using your theme */
+  .spinner {
+    border: 3px solid #FEEAFA; /* pale-purple */
+    border-top: 3px solid #8E9AAF; /* cool-gray */
+    @apply rounded-full w-8 h-8 animate-spin-slow;
+  }
+
+  /* Consultation specific styles from your dashboard */
+  .consultation-card {
+    @apply bg-gradient-to-br from-pale-purple to-lavender border border-thistle;
+  }
+  
+  /* This ensures the consultation button in the dashboard has the right style */
+  .Button[variant="consultation"] {
+    @apply bg-gradient-primary text-white;
+  }
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
