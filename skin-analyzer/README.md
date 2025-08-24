@@ -1,12 +1,48 @@
-# React + Vite
+# **SyncGlow** - Skin Analysis
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-Currently, two official plugins are available:
+**AI-powered skin analysis and personalized skincare recommendations.
+SyncGlow helps users analyze their skin using advanced AI, track their progress, and get curated product suggestions all in one platform.**
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## **Features**
 
-## Expanding the ESLint configuration
+🔬 **Skin Analyzer** – Get instant AI-based skin health analysis.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+📊 **History Tracking** – Track your skin progress over time.
+
+🛍️ **Product Recommendations** – Personalized skincare product suggestions.
+
+🧾 **Orders & Purchases** – Manage and view your past purchases.
+
+👤 **Profile Management** – Secure account management.
+
+👩‍⚕️ **Expert Consultation** – Connect with dermatologists for professional advice.
+
+## **Tech Stack**
+
+### **Frontend**
+
+⚛️ **React.js
+ – UI framework**
+
+🎨 **TailwindCSS
+ – Styling**
+
+⚡ **Vite
+ – Fast bundler**
+
+### **Backend**
+
+⚡ **FastAPI
+ – High-performance Python backend**
+
+🐍 **Python
+ – Core backend language**
+
+🔬 **Face++ API
+ – AI-powered skin analysis**
+
+### **Auth & Database**
+
+🛠️ **Supabase
+ – Authentication + PostgreSQL Database**

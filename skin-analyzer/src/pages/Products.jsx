@@ -1,4 +1,4 @@
-// src/pages/Products.jsx
+ // src/pages/Products.jsx
 
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -237,7 +237,7 @@ const Products = ({ user }) => {
                   <img
                     src={product.image_url}
                     alt={product.name}
-                    className="w-full h-48 object-cover rounded-lg"
+                    className="w-full h-full object-cover rounded-lg"
                   />
                 </div>
                 <div className="space-y-3">

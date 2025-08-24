@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { getCurrentUser } from '../services/supabaseClient'
 import Button from '../components/Button'
@@ -6,7 +6,11 @@ import Card from '../components/Card'
 
 const Home = () => {
   const [loading, setLoading] = useState(true)
+  const [showAuthMessage, setShowAuthMessage] = useState(false); // State for the message
   const navigate = useNavigate()
+
+  const aboutSectionRef = useRef(null);
+  const heroSectionRef = useRef(null); // Ref for the top "hero" section
 
   useEffect(() => {
     checkUser()
@@ -19,6 +23,24 @@ const Home = () => {
     }
     setLoading(false)
   }
+  
+  const handleLearnMoreClick = () => {
+    aboutSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  // Handler for the "Book Consultation" button
+  const handleBookConsultationClick = () => {
+    // Scroll to the top section
+    heroSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
+    
+    // Show the authentication message
+    setShowAuthMessage(true);
+
+    // Hide the message after 5 seconds
+    setTimeout(() => {
+      setShowAuthMessage(false);
+    }, 5000);
+  };
 
   if (loading) {
     return (
@@ -31,7 +53,7 @@ const Home = () => {
   return (
     <div className="min-h-screen bg-gradient-secondary">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="text-center">
+        <div className="text-center" ref={heroSectionRef}> {/* Attach ref here */}
          <div className="w-16 h-16 bg-gradient-primary rounded-2xl mx-auto mb-8 flex items-center justify-center">
           <span className="text-2xl font-bold text-white">
               SG
@@ -45,6 +67,13 @@ const Home = () => {
             Get personalized insights, track your progress over time, and discover the right skincare
             products tailored to your needs
           </p>
+          
+          {/* Conditionally render the authentication message */}
+          {showAuthMessage && (
+            <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-md max-w-md mx-auto animate-pulse">
+              <p className="font-semibold">Sign-in required to book a consultation.</p>
+            </div>
+          )}
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
             <Link to="/signup">
@@ -60,7 +89,7 @@ const Home = () => {
           </div>
         </div>
         
-        <div className="grid md:grid-cols-3 gap-8 mt-16">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mt-16">
           <Card className="text-center">
             <div className="w-12 h-12 bg-pale-purple rounded-lg mx-auto mb-4 flex items-center justify-center">
               <svg className="w-6 h-6 text-cool-gray" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -90,9 +119,16 @@ const Home = () => {
             <h3 className="text-xl font-semibold text-gray-900 mb-2">Expert Consultation</h3>
             <p className="text-gray-600">Connect with certified dermatologists for professional advice and treatment plans.</p>
           </Card>
+          
+          <Card className="text-center">
+            <div className="w-12 h-12 bg-green-100 rounded-lg mx-auto mb-4 flex items-center justify-center">
+                <svg className="w-6 h-6 text-cool-gray" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+            </div>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">Discover Products</h3>
+            <p className="text-gray-600">Find skincare products curated by experts, perfectly matched to your skin's needs.</p>
+          </Card>
         </div>
         
-        {/* New Consultation Section */}
         <div className="mt-20">
           <Card className="consultation-card text-center">
             <div className="max-w-3xl mx-auto">
@@ -109,16 +145,43 @@ const Home = () => {
                 treatment recommendations, and expert guidance on your skin health journey.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button variant="consultation" size="lg" className="w-full sm:w-auto">
+                <Button variant="consultation" size="lg" className="w-full sm:w-auto" onClick={handleBookConsultationClick}> {/* Attach onClick handler here */}
                   Book Consultation
                 </Button>
-                <Button variant="outline" size="lg" className="w-full sm:w-auto">
+                <Button variant="outline" size="lg" className="w-full sm:w-auto" onClick={handleLearnMoreClick}>
                   Learn More
                 </Button>
               </div>
             </div>
           </Card>
         </div>
+
+        <section ref={aboutSectionRef} className="mt-20 py-16">
+            <div className="text-center max-w-4xl mx-auto">
+                <h2 className="text-3xl font-bold text-gray-900 mb-4">
+                    Your Personal Skincare Journey, Simplified
+                </h2>
+                <p className="text-lg text-gray-700 mb-12">
+                    SyncGlow leverages cutting-edge AI to provide you with a deep understanding of your skin.
+                    Our platform is designed to be your trusted partner, guiding you every step of the way
+                    towards healthier, glowing skin.
+                </p>
+                <div className="grid md:grid-cols-3 gap-8 text-left">
+                    <div className="bg-white p-6 rounded-lg shadow-sm">
+                        <h3 className="text-xl font-semibold text-gray-900 mb-2">Data-Driven Insights</h3>
+                        <p className="text-gray-600">Our AI analyzes your photo to identify key skin concerns like acne, pigmentation, and wrinkles, providing you with a detailed report.</p>
+                    </div>
+                    <div className="bg-white p-6 rounded-lg shadow-sm">
+                        <h3 className="text-xl font-semibold text-gray-900 mb-2">Personalized Routines</h3>
+                        <p className="text-gray-600">Based on your analysis, we recommend a personalized skincare routine with product suggestions that fit your skin type and goals.</p>
+                    </div>
+                    <div className="bg-white p-6 rounded-lg shadow-sm">
+                        <h3 className="text-xl font-semibold text-gray-900 mb-2">Track Your Transformation</h3>
+                        <p className="text-gray-600">Regularly upload photos to track your skin's progress. Our visual timeline makes it easy to see the effectiveness of your routine.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
       </div>
     </div>
   )

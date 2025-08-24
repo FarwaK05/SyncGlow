@@ -4,12 +4,36 @@ import { getCartItems, updateCartItem, removeFromCart, createOrder } from '../se
 import Card from '../components/Card'
 import Button from '../components/Button'
 
+// A reusable input component for the form
+const FormInput = ({ id, label, ...props }) => (
+  <div>
+    <label htmlFor={id} className="block text-sm font-medium text-gray-700 mb-1">
+      {label}
+    </label>
+    <input
+      id={id}
+      {...props}
+      className="w-full px-3 py-2 border border-thistle rounded-lg focus:outline-none focus:ring-2 focus:ring-cool-gray focus:border-transparent bg-white"
+    />
+  </div>
+);
+
+
 const Cart = ({ user }) => {
   const [cartItems, setCartItems] = useState([])
   const [loading, setLoading] = useState(true)
   const [updating, setUpdating] = useState({})
   const [orderLoading, setOrderLoading] = useState(false)
-  const [shippingAddress, setShippingAddress] = useState('')
+  
+  // State for the structured shipping form
+  const [shippingDetails, setShippingDetails] = useState({
+    fullName: '',
+    addressLine1: '',
+    city: '',
+    state: '',
+    zipCode: '',
+  });
+
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -60,11 +84,24 @@ const Cart = ({ user }) => {
       return total + (parseFloat(item.products.price) * item.quantity)
     }, 0).toFixed(2)
   }
+  
+  // Handler for form input changes
+  const handleShippingChange = (e) => {
+    const { name, value } = e.target;
+    setShippingDetails(prev => ({
+        ...prev,
+        [name]: value
+    }));
+  };
 
-  const handlePlaceOrder = async () => {
-    if (!shippingAddress.trim()) {
-      alert('Please enter a shipping address')
-      return
+
+  const handlePlaceOrder = async (e) => {
+    e.preventDefault(); // Prevent default form submission
+
+    const { fullName, addressLine1, city, state, zipCode } = shippingDetails;
+    if (!fullName.trim() || !addressLine1.trim() || !city.trim() || !state.trim() || !zipCode.trim()) {
+      alert('Please fill out all required shipping fields.');
+      return;
     }
 
     if (cartItems.length === 0) {
@@ -74,7 +111,10 @@ const Cart = ({ user }) => {
 
     setOrderLoading(true)
     
-    const { data, error } = await createOrder(user.id, calculateTotal(), shippingAddress, cartItems)
+    // Format the structured address into a single string for the backend
+    const formattedAddress = `${fullName}\n${addressLine1}\n${city}, ${state} ${zipCode}`;
+    
+    const { data, error } = await createOrder(user.id, calculateTotal(), formattedAddress, cartItems)
     
     if (error) {
       alert('Failed to place order. Please try again.')
@@ -139,7 +179,7 @@ const Cart = ({ user }) => {
                     <img
                       src={item.products.image_url}
                       alt={item.products.name}
-                      className="w-20 h-20 object-cover rounded-lg"
+                      className="w-20 h-20 object-contain rounded-lg" // Changed to object-contain
                     />
                     <div className="flex-1">
                       <h3 className="text-lg font-semibold text-gray-900">
@@ -192,10 +232,10 @@ const Cart = ({ user }) => {
                 <div className="space-y-3 mb-6">
                   {cartItems.map((item) => (
                     <div key={item.id} className="flex justify-between text-sm">
-                      <span className="text-gray-600">
+                      <span className="text-gray-600 truncate pr-2" title={item.products.name}>
                         {item.products.name} × {item.quantity}
                       </span>
-                      <span className="font-semibold">
+                      <span className="font-semibold flex-shrink-0">
                         ${(parseFloat(item.products.price) * item.quantity).toFixed(2)}
                       </span>
                     </div>
@@ -209,28 +249,74 @@ const Cart = ({ user }) => {
                   </div>
                 </div>
 
-                <div className="mb-6">
-                  <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-2">
-                    Shipping Address
-                  </label>
-                  <textarea
-                    id="address"
-                    rows={3}
-                    value={shippingAddress}
-                    onChange={(e) => setShippingAddress(e.target.value)}
-                    className="w-full px-3 py-2 border border-thistle rounded-lg focus:outline-none focus:ring-2 focus:ring-cool-gray focus:border-transparent bg-white"
-                    placeholder="Enter your complete shipping address..."
+                {/* --- UPDATED SHIPPING FORM --- */}
+                <form onSubmit={handlePlaceOrder} className="space-y-4">
+                  <h3 className="text-lg font-semibold text-gray-800">
+                    Shipping Details
+                  </h3>
+                  <FormInput
+                    id="fullName"
+                    name="fullName"
+                    label="Full Name"
+                    type="text"
+                    placeholder="Jane Doe"
+                    value={shippingDetails.fullName}
+                    onChange={handleShippingChange}
+                    required
                   />
-                </div>
-
-                <Button
-                  onClick={handlePlaceOrder}
-                  loading={orderLoading}
-                  className="w-full"
-                  size="lg"
-                >
-                  Place Order
-                </Button>
+                  <FormInput
+                    id="addressLine1"
+                    name="addressLine1"
+                    label="Address Line 1"
+                    type="text"
+                    placeholder="123 Main St"
+                    value={shippingDetails.addressLine1}
+                    onChange={handleShippingChange}
+                    required
+                  />
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <FormInput
+                      id="city"
+                      name="city"
+                      label="City"
+                      type="text"
+                      placeholder="Anytown"
+                      value={shippingDetails.city}
+                      onChange={handleShippingChange}
+                      required
+                    />
+                    <FormInput
+                      id="state"
+                      name="state"
+                      label="State / Province"
+                      type="text"
+                      placeholder="CA"
+                      value={shippingDetails.state}
+                      onChange={handleShippingChange}
+                      required
+                    />
+                  </div>
+                  <FormInput
+                    id="zipCode"
+                    name="zipCode"
+                    label="ZIP / Postal Code"
+                    type="text"
+                    placeholder="90210"
+                    value={shippingDetails.zipCode}
+                    onChange={handleShippingChange}
+                    required
+                  />
+                  <div className="pt-2">
+                    <Button
+                      type="submit"
+                      loading={orderLoading}
+                      className="w-full"
+                      size="lg"
+                    >
+                      Place Order
+                    </Button>
+                  </div>
+                </form>
 
                 <div className="mt-4 text-xs text-gray-500 text-center">
                   Secure checkout • Free shipping on orders over $50

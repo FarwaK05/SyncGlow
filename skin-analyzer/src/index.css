@@ -3,6 +3,7 @@
 @tailwind utilities;
 
 /* --- SCROLLBAR USING YOUR BRIGHT PALETTE --- */
+/* Note: This only applies to desktop browsers, not mobile */
 ::-webkit-scrollbar {
   width: 8px;
 }
@@ -24,39 +25,48 @@
     @apply focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-thistle;
   }
 
-  /* --- ENHANCED CARD HOVER EFFECT --- */
-  .card-hover {
-    @apply transition-all duration-300 ease-in-out;
-  }
-  .card-hover:hover {
-    /* Lifts up and gets a subtle glow shadow */
-    @apply transform -translate-y-2 shadow-[0_10px_30px_-10px_rgba(203,192,211,0.7)];
+  /* --- ENHANCED HOVER EFFECTS (FOR DESKTOP ONLY) --- */
+  /* This media query ensures hover effects only apply on devices with a mouse */
+  @media (hover: hover) and (pointer: fine) {
+    .card-hover {
+      @apply transition-all duration-300 ease-in-out;
+    }
+    .card-hover:hover {
+      /* Lifts up and gets a subtle glow shadow */
+      @apply transform -translate-y-2 shadow-[0_10px_30px_-10px_rgba(203,192,211,0.7)];
+    }
+
+    .btn-animate {
+      @apply transition-all duration-200 ease-in-out;
+    }
+    .btn-animate:hover {
+      /* Lifts, scales up, and gets a brighter shadow */
+      @apply transform -translate-y-1 scale-105 shadow-lg;
+    }
   }
 
-  /* --- ENHANCED BUTTON ANIMATIONS --- */
-  .btn-animate {
-    @apply transition-all duration-200 ease-in-out;
-  }
-  .btn-animate:hover {
-    /* Lifts, scales up, and gets a brighter shadow */
-    @apply transform -translate-y-1 scale-105 shadow-lg;
-  }
+  /* --- BUTTON ACTIVE STATE (WORKS ON TAP & CLICK) --- */
   .btn-animate:active {
-    /* "Pushes down" when clicked */
+    /* "Pushes down" when clicked or tapped */
     @apply scale-95;
   }
 
-  /* --- NEW: SHIMMER EFFECT FOR GRADIENT BUTTONS --- */
-  .btn-gradient-shimmer {
-    /* This class should be ADDED to a button that already has a gradient */
-    background-size: 200% auto; /* Essential for the shimmer effect */
-    @apply animate-shimmer;
+  /* --- NEW: RESPONSIVE TYPOGRAPHY UTILITIES --- */
+  /* Use these classes on your h1, h2, etc., for automatic resizing */
+  .text-responsive-h1 {
+    @apply text-3xl sm:text-4xl lg:text-5xl font-bold;
+  }
+  .text-responsive-h2 {
+    @apply text-2xl sm:text-3xl lg:text-4xl font-bold;
+  }
+  .text-responsive-p {
+    @apply text-base lg:text-lg;
   }
 
-  /* --- NEW: FADE-IN ANIMATION CLASS --- */
-  .animate-on-load {
-    /* Add this class to elements you want to animate on page load */
-    @apply animate-fade-in-up opacity-0;
+  /* --- NEW: RESPONSIVE PADDING UTILITY --- */
+  /* Use this on main page containers for consistent padding */
+  .container-responsive-padding {
+    @apply px-4 sm:px-6 lg:px-8;
   }
 
   /* A custom spinner class using your theme */
@@ -71,13 +81,22 @@
     @apply bg-gradient-to-br from-pale-purple to-lavender border border-thistle;
   }
   
-  /* This ensures the consultation button in the dashboard has the right style */
-  .Button[variant="consultation"] {
-    @apply bg-gradient-primary text-white;
+  /* --- CORRECTED: Consultation Button Styling --- */
+  .consultation-button {
+    /* Base styles with the strong border you wanted */
+    @apply bg-gradient-to-br from-pale-purple to-lavender text-cool-gray font-semibold shadow-md;
+    @apply border-2 border-cool-gray;
+    @apply transition-all duration-200;
+  }
+  /* The hover effect is now inside the media query for desktops */
+  @media (hover: hover) and (pointer: fine) {
+    .consultation-button:hover {
+      @apply shadow-lg transform -translate-y-0.5;
+    }
   }
 }
 
-/* Accessibility improvements */
+/* Accessibility improvements: Reduces motion for users who prefer it */
 @media (prefers-reduced-motion: reduce) {
   * {
     animation-duration: 0.01ms !important;
