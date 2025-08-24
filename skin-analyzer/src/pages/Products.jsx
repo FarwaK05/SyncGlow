@@ -1,14 +1,10 @@
- // src/pages/Products.jsx
+// src/pages/Products.jsx
 
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getProducts, addToCart, getCartItems } from '../services/supabaseClient'
 import Card from '../components/Card'
 import Button from '../components/Button'
-
-// --- ICON CHANGES START HERE ---
-// We are no longer importing from 'react-icons'.
-// Instead, we define our own simple SVG icon components.
 
 const IconLeaf = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 20h18L12 4 3 20z"/><path d="M12 4v16"/></svg>
@@ -38,50 +34,13 @@ const Products = ({ user }) => {
   const navigate = useNavigate();
 
   const skinTypes = [
-    {
-      id: 'normal',
-      name: 'Normal Skin',
-      description: 'Balanced skin with minimal concerns',
-      color: 'bg-gradient-to-br from-green-100 to-green-200',
-      icon: <IconLeaf />
-    },
-    {
-      id: 'sensitive',
-      name: 'Sensitive Skin',
-      description: 'Easily irritated, requires gentle care',
-      color: 'bg-gradient-to-br from-pink-100 to-pink-200',
-      icon: <IconFeather />
-    },
-    {
-      id: 'oily',
-      name: 'Oily Skin',
-      description: 'Excess oil production, enlarged pores',
-      color: 'bg-gradient-to-br from-blue-100 to-blue-200',
-      icon: <IconDroplet />
-    },
-    {
-      id: 'dry',
-      name: 'Dry Skin',
-      description: 'Lacks moisture, may feel tight',
-      color: 'bg-gradient-to-br from-yellow-100 to-yellow-200',
-      icon: <IconMoon />
-    },
-    {
-      id: 'combination',
-      name: 'Combination Skin',
-      description: 'Mix of oily T-zone and normal/dry cheeks',
-      color: 'bg-gradient-to-br from-purple-100 to-purple-200',
-      icon: <IconLayers />
-    },
-    {
-      id: 'acne',
-      name: 'Acne-Prone Skin',
-      description: 'Prone to breakouts and blemishes',
-      color: 'bg-gradient-to-br from-red-100 to-red-200',
-      icon: <IconShield />
-    }
+    { id: 'normal', name: 'Normal Skin', description: 'Balanced skin with minimal concerns', color: 'bg-gradient-to-br from-green-100 to-green-200', icon: <IconLeaf /> },
+    { id: 'sensitive', name: 'Sensitive Skin', description: 'Easily irritated, requires gentle care', color: 'bg-gradient-to-br from-pink-100 to-pink-200', icon: <IconFeather /> },
+    { id: 'oily', name: 'Oily Skin', description: 'Excess oil production, enlarged pores', color: 'bg-gradient-to-br from-blue-100 to-blue-200', icon: <IconDroplet /> },
+    { id: 'dry', name: 'Dry Skin', description: 'Lacks moisture, may feel tight', color: 'bg-gradient-to-br from-yellow-100 to-yellow-200', icon: <IconMoon /> },
+    { id: 'combination', name: 'Combination Skin', description: 'Mix of oily T-zone and normal/dry cheeks', color: 'bg-gradient-to-br from-purple-100 to-purple-200', icon: <IconLayers /> },
+    { id: 'acne', name: 'Acne-Prone Skin', description: 'Prone to breakouts and blemishes', color: 'bg-gradient-to-br from-red-100 to-red-200', icon: <IconShield /> }
   ]
-  // --- ICON CHANGES END HERE ---
 
   useEffect(() => {
     if (user) {
@@ -191,7 +150,6 @@ const Products = ({ user }) => {
     )
   }
 
-  // The rest of the component remains the same
   const selectedSkinTypeInfo = skinTypes.find(st => st.id === selectedSkinType)
 
   return (
@@ -232,7 +190,10 @@ const Products = ({ user }) => {
         ) : (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {products.map((product) => (
-              <Card key={product.id} className="hover:shadow-xl transition-shadow">
+              // --- CHANGE #1: Make the Card a vertical flex container ---
+              <Card key={product.id} className="flex flex-col hover:shadow-xl transition-shadow">
+                
+                {/* Image Section */}
                 <div className="aspect-w-1 aspect-h-1 mb-4">
                   <img
                     src={product.image_url}
@@ -240,35 +201,47 @@ const Products = ({ user }) => {
                     className="w-full h-full object-cover rounded-lg"
                   />
                 </div>
-                <div className="space-y-3">
-                  <div className="flex items-start justify-between">
-                    <h3 className="text-lg font-semibold text-gray-900">
-                      {product.name}
-                    </h3>
-                    <span className="text-xl font-bold text-cool-gray">
-                      ${product.price}
-                    </span>
+                
+                {/* --- CHANGE #2: Create a content wrapper that grows --- */}
+                {/* This div will contain both the info and the button */}
+                <div className="flex flex-col flex-1 p-4">
+                  
+                  {/* This inner div holds the text and will expand */}
+                  <div className="flex-grow">
+                    <div className="flex items-start justify-between">
+                      <h3 className="text-lg font-semibold text-gray-900">
+                        {product.name}
+                      </h3>
+                      <span className="text-xl font-bold text-cool-gray ml-2">
+                        ${product.price}
+                      </span>
+                    </div>
+                    <p className="text-sm text-gray-600 line-clamp-2 mt-2">
+                      {product.description}
+                    </p>
+                    <div className="flex items-center justify-between text-sm mt-3">
+                      <span className="bg-pale-purple text-cool-gray px-2 py-1 rounded-full">
+                        {product.category}
+                      </span>
+                      <span className="text-gray-500">
+                        {product.brand}
+                      </span>
+                    </div>
                   </div>
-                  <p className="text-sm text-gray-600 line-clamp-2">
-                    {product.description}
-                  </p>
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="bg-pale-purple text-cool-gray px-2 py-1 rounded-full">
-                      {product.category}
-                    </span>
-                    <span className="text-gray-500">
-                      {product.brand}
-                    </span>
+
+                  {/* --- CHANGE #3: The button is now separate, with a top margin --- */}
+                  {/* This ensures a consistent space above the button */}
+                  <div className="mt-4">
+                    <Button
+                      onClick={() => handleAddToCart(product.id)}
+                      loading={addingToCart[product.id]}
+                      disabled={isInCart(product.id)}
+                      className="w-full"
+                      variant={isInCart(product.id) ? 'secondary' : 'primary'}
+                    >
+                      {isInCart(product.id) ? 'In Cart ✓' : 'Add to Cart'}
+                    </Button>
                   </div>
-                  <Button
-                    onClick={() => handleAddToCart(product.id)}
-                    loading={addingToCart[product.id]}
-                    disabled={isInCart(product.id)}
-                    className="w-full"
-                    variant={isInCart(product.id) ? 'secondary' : 'primary'}
-                  >
-                    {isInCart(product.id) ? 'In Cart ✓' : 'Add to Cart'}
-                  </Button>
                 </div>
               </Card>
             ))}

@@ -10,36 +10,34 @@ const Consultation = ({ user }) => {
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
 
+  // --- UPDATED DOCTORS LIST WITH PKR PRICING ---
   const doctors = [
     {
       id: 1,
-      name: 'Dr. Sarah Johnson',
+      name: 'Prof. Dr. Ikram Ullah Khan | Best Dermatologist in Islamabad | Best Skin Specialist',
       specialty: 'Dermatology',
-      experience: '15 years',
+      experience: '20+ years',
       rating: 4.9,
-      image: 'https://images.pexels.com/photos/5327580/pexels-photo-5327580.jpeg?auto=compress&cs=tinysrgb&w=300&h=300&fit=crop',
       availability: ['9:00 AM', '11:00 AM', '2:00 PM', '4:00 PM'],
-      price: '$150'
+      price: '15,000 PKR' // Changed from $200
     },
     {
       id: 2,
-      name: 'Dr. Michael Chen',
+      name: 'DR AASMA TAYYAB KHAN | Best dermatologist in Islamabad',
       specialty: 'Cosmetic Dermatology',
-      experience: '12 years',
+      experience: '15 years',
       rating: 4.8,
-      image: 'https://images.pexels.com/photos/5327921/pexels-photo-5327921.jpeg?auto=compress&cs=tinysrgb&w=300&h=300&fit=crop',
       availability: ['10:00 AM', '1:00 PM', '3:00 PM', '5:00 PM'],
-      price: '$180'
+      price: '12,000 PKR' // Changed from $180
     },
     {
       id: 3,
-      name: 'Dr. Emily Rodriguez',
+      name: 'Dr Mahvish Zahra (Best Dermatologist, Skin Specialist In Islamabad/Rawalpindi)',
       specialty: 'Pediatric Dermatology',
-      experience: '10 years',
+      experience: '12 years',
       rating: 4.9,
-      image: 'https://images.pexels.com/photos/5327656/pexels-photo-5327656.jpeg?auto=compress&cs=tinysrgb&w=300&h=300&fit=crop',
       availability: ['8:00 AM', '12:00 PM', '2:30 PM', '4:30 PM'],
-      price: '$140'
+      price: '10,000 PKR' // Changed from $160
     }
   ]
 
@@ -62,7 +60,7 @@ const Consultation = ({ user }) => {
   if (success) {
     return (
       <div className="min-h-screen bg-gradient-secondary py-8">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto container-responsive-padding">
           <Card className="text-center consultation-card">
             <div className="w-20 h-20 bg-gradient-accent rounded-full mx-auto mb-6 flex items-center justify-center">
               <svg className="w-10 h-10 text-cool-gray" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -71,11 +69,11 @@ const Consultation = ({ user }) => {
             </div>
             <h1 className="text-3xl font-bold text-gray-900 mb-4">Consultation Booked!</h1>
             <p className="text-lg text-gray-700 mb-6">
-              Your consultation with {selectedDoctor?.name} has been successfully scheduled.
+              Your consultation with {selectedDoctor?.name.split('|')[0].trim()} has been successfully scheduled.
             </p>
             <div className="bg-pale-purple rounded-lg p-6 mb-6">
               <h3 className="font-semibold text-gray-900 mb-2">Appointment Details</h3>
-              <p className="text-gray-700">Doctor: {selectedDoctor?.name}</p>
+              <p className="text-gray-700">Doctor: {selectedDoctor?.name.split('|')[0].trim()}</p>
               <p className="text-gray-700">Time: {selectedTime}</p>
               <p className="text-gray-700">Type: {consultationType === 'video' ? 'Video Call' : 'In-Person'}</p>
               <p className="text-gray-700">Price: {selectedDoctor?.price}</p>
@@ -96,10 +94,10 @@ const Consultation = ({ user }) => {
 
   return (
     <div className="min-h-screen bg-gradient-secondary py-8">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-6xl mx-auto container-responsive-padding">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Expert Consultation</h1>
-          <p className="text-gray-600">
+          <h1 className="text-responsive-h1 mb-2">Expert Consultation</h1>
+          <p className="text-gray-600 text-responsive-p">
             Connect with board-certified dermatologists for personalized advice and treatment plans
           </p>
         </div>
@@ -121,15 +119,16 @@ const Consultation = ({ user }) => {
                     onClick={() => setSelectedDoctor(doctor)}
                   >
                     <div className="flex items-start space-x-4">
-                      <img
-                        src={doctor.image}
-                        alt={doctor.name}
-                        className="w-16 h-16 rounded-full object-cover"
-                      />
+                      <div className="w-16 h-16 rounded-full border-2 border-cool-gray flex-shrink-0 flex items-center justify-center bg-white">
+                        <svg className="w-8 h-8 text-cool-gray" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                        </svg>
+                      </div>
+
                       <div className="flex-1">
                         <div className="flex items-center justify-between mb-2">
-                          <h3 className="text-xl font-semibold text-gray-900">{doctor.name}</h3>
-                          <span className="text-2xl font-bold text-cool-gray">{doctor.price}</span>
+                          <h3 className="text-lg font-semibold text-gray-900">{doctor.name}</h3>
+                          <span className="text-xl font-bold text-cool-gray ml-4 whitespace-nowrap">{doctor.price}</span>
                         </div>
                         <p className="text-thistle font-medium mb-1">{doctor.specialty}</p>
                         <p className="text-gray-600 mb-2">{doctor.experience} experience</p>
@@ -219,7 +218,7 @@ const Consultation = ({ user }) => {
                 {selectedDoctor && selectedTime && (
                   <div className="bg-pale-purple rounded-lg p-4">
                     <h3 className="font-semibold text-gray-900 mb-2">Booking Summary</h3>
-                    <p className="text-gray-700 text-sm">Doctor: {selectedDoctor.name}</p>
+                    <p className="text-gray-700 text-sm">Doctor: {selectedDoctor.name.split('|')[0].trim()}</p>
                     <p className="text-gray-700 text-sm">Time: {selectedTime}</p>
                     <p className="text-gray-700 text-sm">Type: {consultationType === 'video' ? 'Video Call' : 'In-Person'}</p>
                     <p className="text-gray-700 text-sm font-semibold">Total: {selectedDoctor.price}</p>

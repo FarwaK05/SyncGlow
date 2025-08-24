@@ -47,6 +47,22 @@ SyncGlow helps users analyze their skin using advanced AI, track their progress,
 🛠️ **Supabase
  – Authentication + PostgreSQL Database**
 
+## 🔑 **Environment Variables**
+#### **Create a .env file inside backend/:**
+``` 
+FACEPLUSPLUS_API_KEY=your_facepp_api_key
+
+FACEPLUSPLUS_API_SECRET=your_facepp_api_secret
+
+```
+#### **For frontend (.env.local):**
+```
+VITE_SUPABASE_URL=your_supabase_project_url
+
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
+
+
 ## **Usage**
 
 **Sign up / Log in with Supabase Auth.**
@@ -67,8 +83,12 @@ SyncGlow helps users analyze their skin using advanced AI, track their progress,
 **Advanced Analysis API with Subscription
 Enable premium users to access deeper AI-powered insights.**
 
-**Dermatologist Platform
+**Dermatologist Platform:
 Functional consultation booking system + dashboard for dermatologists to register and manage their services.**
 
 **AI Product Recommendation Engine
 Automatically suggest skincare products after each analysis, tailored to the detected skin type.**
+
+## **License**
+
+MIT License – free to use, modify, and distribute with attribution.
